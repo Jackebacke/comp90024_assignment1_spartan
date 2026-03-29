@@ -1,27 +1,15 @@
 import json
 import os
+import sys
 from collections import Counter
 
 import mpi4py.MPI as MPI
 from langs_from_post import extract_languages
 
-PATH = "comp90024_assignment1_spartan/bluesky-medium.ndjson"
-
-# Initialize MPI
-comm = MPI.COMM_WORLD
-rank = comm.Get_rank()
-size = comm.Get_size()
-
-# Calculate byte ranges for each process
-file_size = os.path.getsize(PATH)
-chunk_size = file_size // size
-start_byte = rank * chunk_size
-end_byte = file_size if rank == size - 1 else (rank + 1) * chunk_size
-
 
 def local_count() -> Counter:
     """Counts languages in the assigned chunk of the file."""
-    with open(PATH, "r", encoding="utf-8") as f:
+    with open(path, "r", encoding="utf-8") as f:
         f.seek(start_byte)  # Move to the start of the assigned chunk
         if rank != 0:
             f.readline()  # Skip partial line for non-root processes
@@ -43,8 +31,32 @@ def local_count() -> Counter:
 
 
 if __name__ == "__main__":
+    if len(sys.argv) > 1:
+        path = sys.argv[1]
+    else:
+        print("Please provide the path to the NDJSON file as a command-line argument.")
+        sys.exit(1)
+
+    # Initialize MPI
+    comm = MPI.COMM_WORLD
+    rank = comm.Get_rank()
+    size = comm.Get_size()
+
+    # Calculate byte ranges for each process
+    file_size = os.path.getsize(path)
+    chunk_size = file_size // size
+    start_byte = rank * chunk_size
+    end_byte = file_size if rank == size - 1 else (rank + 1) * chunk_size
+
+    comm.Barrier()  # Synchronize before starting the timer
+    start_time = MPI.Wtime()
+
     local_langs = local_count()
     global_langs = comm.reduce(local_langs, op=MPI.SUM, root=0)
 
+    comm.Barrier()
+    end_time = MPI.Wtime()
+
     if rank == 0:
         print(f"Total language counts: {global_langs}")
+        print(f"Execution time: {end_time - start_time:.2f} seconds")
