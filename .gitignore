@@ -1,6 +1,7 @@
 # Project-specific 
-*.ndjson
-*.pdf
+# *.ndjson
+# *.pdf
+
 # Ignore macOS system files
 /.DS_Store
 .vscode/
