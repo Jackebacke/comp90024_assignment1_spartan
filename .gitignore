@@ -1,6 +1,7 @@
 # Project-specific 
 # *.ndjson
 # *.pdf
+slurm-*.out
 
 # Ignore macOS system files
 /.DS_Store
