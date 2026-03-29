@@ -1,14 +1,10 @@
-import json
-
 def extract_languages(post) -> list:
     """Extracts the language(s) from a post, handling both Bluesky and Mastodon formats."""
-    if (
-        isinstance(post.get("record"), dict) and "langs" in post["record"]
-    ):  # Bluesky format
+    if isinstance(post.get("record"), dict) and "langs" in post["record"]:
+        # Bluesky format
         post_langs = post["record"]["langs"]
-    elif (
-        isinstance(post.get("doc"), dict) and "language" in post["doc"]
-    ):  # Mastodon format
+    elif isinstance(post.get("doc"), dict) and "language" in post["doc"]:
+        # Mastodon format
         post_langs = post["doc"]["language"]
     else:
         return ["<Missing>"]
