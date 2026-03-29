@@ -1,7 +1,7 @@
-from tracemalloc import start
+import os
 
 import mpi4py.MPI as MPI
-import os
+
 
 def test_mpi4py():
     comm = MPI.COMM_WORLD
@@ -27,7 +27,7 @@ def test_mpi4py_sum():
         print(f"The total sum of ranks is: {global_sum}")
 
 
-def test_mpi4py_json_split(path="ass1/bluesky-medium.ndjson"):
+def test_mpi4py_json_split(path="comp90024_assignment1_spartan/bluesky-medium.ndjson"):
     comm = MPI.COMM_WORLD
     rank = comm.Get_rank()
     size = comm.Get_size()
@@ -38,17 +38,17 @@ def test_mpi4py_json_split(path="ass1/bluesky-medium.ndjson"):
     # print("Chunk size:", chunk_size, "bytes")
     start_byte = rank * chunk_size
     end_byte = file_size if rank == size - 1 else (rank + 1) * chunk_size
-    
+
     if rank == 0:
         print(f"Started reading file '{path}' with {size} processes.")
         print(f"File size: {file_size} bytes, Chunk size: {chunk_size} bytes \n")
     print(f"Process {rank} will read bytes {start_byte} to {end_byte}")
-    
+
     with open(path, "r", encoding="utf-8") as f:
-        f.seek(start_byte) # Move to the start of the assigned chunk
+        f.seek(start_byte)  # Move to the start of the assigned chunk
         if rank != 0:
             f.readline()  # Skip partial line for non-root processes
-        
+
         i = 1
         while f.tell() < end_byte:
             line = f.readline()
@@ -60,6 +60,5 @@ def test_mpi4py_json_split(path="ass1/bluesky-medium.ndjson"):
 
 if __name__ == "__main__":
     # test_mpi4py()
-    # test_mpi4py_sum()
-    
-    test_mpi4py_json_split("ass1/mastodon-medium.ndjson")
+    test_mpi4py_sum()
+    # test_mpi4py_json_split("comp90024_assignment1_spartan/mastodon-medium.ndjson")

@@ -43,10 +43,9 @@ def langs_from_post(post) -> list:
 
 
 if __name__ == "__main__":
-    # path = "ass1/mastodon-small.ndjson"
-    # path = "ass1/mastodon-medium.ndjson"
-    # path = "ass1/bluesky-small.ndjson"
-    path = "ass1/bluesky-medium.ndjson"
-
+    # path = "comp90024_assignment1_spartan/mastodon-small.ndjson"
+    # path = "comp90024_assignment1_spartan/mastodon-medium.ndjson"
+    # path = "comp90024_assignment1_spartan/bluesky-small.ndjson"
+    path = "comp90024_assignment1_spartan/bluesky-medium.ndjson"
     langs = get_langs(path)
     print(f"Languages found: {langs}")
