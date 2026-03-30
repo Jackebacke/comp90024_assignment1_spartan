@@ -61,10 +61,11 @@ if __name__ == "__main__":
         # Sort by number of occurrences in descending order and convert to list 
         global_langs = list(sorted(global_langs.items(), key=lambda elem: elem[1], reverse=True))
 
+        print(f"Total language counts: {global_langs}", file=sys.stderr)
+
         print("Language | Frequency")
         print("---------|----------")
         for lang, n in global_langs:
             print(str(lang).ljust(9) + f"| {n}")
-        
-        print(f"Total language counts: {global_langs}", file=sys.stderr)
-        print(f"Execution time: {end_time - start_time:.2f} seconds", file=sys.stderr)
+            
+        print(f"Execution time: {end_time - start_time:f} seconds")
