@@ -1,5 +1,7 @@
 #!/bin/sh
-#SBATCH --job-name=assignment1
+#SBATCH --job-name=assignment1-2_8
+#SBATCH --output=slurm-%j-%x.out
+#SBATCH --error=slurm-%j-%x.out
 #SBATCH --time=01:00:00     #(hrs:min:sec until )
 #SBATCH --nodes=2           #(no. of nodes to run on)
 #SBATCH --ntasks=8          #(no. of tasks IN TOTAL to run)
