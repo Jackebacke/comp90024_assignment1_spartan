@@ -6,7 +6,6 @@ from collections import Counter
 import mpi4py.MPI as MPI
 from langs_from_post import extract_languages
 
-
 def local_count() -> Counter:
     """Counts languages in the assigned chunk of the file."""
     with open(path, "r", encoding="utf-8") as f:
@@ -25,8 +24,9 @@ def local_count() -> Counter:
                 local_count.update(extract_languages(post))
             except json.JSONDecodeError:
                 continue
+    
+    print(f"Process {rank} counted languages: {local_count}", file=sys.stderr)
 
-    print(f"Process {rank} counted languages: {local_count}")
     return local_count
 
 
@@ -58,5 +58,13 @@ if __name__ == "__main__":
     end_time = MPI.Wtime()
 
     if rank == 0:
-        print(f"Total language counts: {global_langs}")
-        print(f"Execution time: {end_time - start_time:.2f} seconds")
+        # Sort by number of occurrences in descending order and convert to list 
+        global_langs = list(sorted(global_langs.items(), key=lambda elem: elem[1], reverse=True))
+
+        print("Language | Frequency")
+        print("---------|----------")
+        for lang, n in global_langs:
+            print(str(lang).ljust(9) + f"| {n}")
+        
+        print(f"Total language counts: {global_langs}", file=sys.stderr)
+        print(f"Execution time: {end_time - start_time:.2f} seconds", file=sys.stderr)

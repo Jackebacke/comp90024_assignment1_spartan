@@ -13,7 +13,7 @@ def extract_languages(post) -> list:
         return ["<None>"]
     if isinstance(post_langs, list):
         if not post_langs:  # Empty list case
-            return ["<empty_list>"]
+            return ["<empty>"]
         else:
             return post_langs
     elif isinstance(post_langs, str):
